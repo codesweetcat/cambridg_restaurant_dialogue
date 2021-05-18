@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PageTaskDescriptionAndBriefing renders correctly 1`] = `
+<div
+  className="container searchContainer"
+>
+  <div>
+    It looks like something went wrong.  Please reload this page to start over. Remember to try and get the system to recommend a restaurant that matches the task description.
+  </div>
+</div>
+`;
