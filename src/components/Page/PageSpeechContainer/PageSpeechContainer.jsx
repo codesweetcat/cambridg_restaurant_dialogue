@@ -157,7 +157,7 @@ const stopRecording=(e)=>{
     jsonData['session_id'] = sessionId
     jsonData['utt_number'] = counter
     jsonData['user_utt'] = isUtt? inputText : 'hangup'
-    jsonData['function_name'] = "getDialogueUtt"
+    jsonData['function_name'] = "getDialogueUtt" //getDialogueUtt_demo
     //user_utt_array
     jsonData['user_utt_array'] = null
     jsonData['hangup'] = isUtt? '0' : '1'

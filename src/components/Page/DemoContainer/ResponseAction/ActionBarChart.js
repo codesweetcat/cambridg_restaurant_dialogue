@@ -71,12 +71,12 @@ const ActionBarChart = ({labels,dataset,lightBarColor,darkBarColor}) => {
           backdropColor:backgroudColorTickLabel(dataset,lightBarColor,darkBarColor),
           font: {
             family: 'Comic Sans MS',
-            size: 40,
+            size: 18,
             weight: 'bold',
-            lineHeight: 1.2,
+            lineHeight: 1,
           },
-          backdropPadding: 30,
-          padding:60,
+          backdropPadding: 3,
+          padding:3,
           // textStrokeWidth:6,
           // textStrokeColor:'black',
           color:backgroudColorFontColor(dataset)
@@ -90,7 +90,7 @@ const ActionBarChart = ({labels,dataset,lightBarColor,darkBarColor}) => {
     // In this case, we are setting the border of each horizontal bar to be 2px wide
     elements: {
       bar: {
-        borderWidth: 2,
+        borderWidth: 1,
       },
     },
     plugins: {
@@ -115,6 +115,7 @@ const ActionBarChart = ({labels,dataset,lightBarColor,darkBarColor}) => {
         // yAxisID:'A',
         backgroundColor: backgroudColorBar(dataset,lightBarColor,darkBarColor),
         borderWidth: 1,
+        barThickness:30
       },
     ],
   };

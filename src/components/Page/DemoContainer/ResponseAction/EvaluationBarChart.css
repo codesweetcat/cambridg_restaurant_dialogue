@@ -1,4 +1,9 @@
-.enaluation_chart-container  canvas{
-  width:350px !important;
-  height:480px !important;
+.evaluation_chart-container {
+  width: 380px;
+  height: 520px;
+}
+
+.evaluation_chart-container canvas {
+  width: 350px !important;
+  height: 480px !important;
 }

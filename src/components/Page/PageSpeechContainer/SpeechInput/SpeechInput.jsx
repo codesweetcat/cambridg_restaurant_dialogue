@@ -96,7 +96,7 @@ const SpeechInput = () => {
               jsonData['session_id'] = sessionId
               jsonData['utt_number'] = counter
               jsonData['user_utt'] = transcript 
-              jsonData['function_name'] = "getDialogueUtt"
+              jsonData['function_name'] = "getDialogueUtt_demo"//getDialogueUtt_demo
               //user_utt_array
               jsonData['user_utt_array'] = JSON.stringify(hypothesis_array)
               jsonData['hangup'] = '0' 
