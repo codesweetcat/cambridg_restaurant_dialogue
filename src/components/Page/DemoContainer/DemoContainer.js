@@ -63,38 +63,14 @@ function DemoContainer() {
     totalIndexVisualData <= 0 || currentIndexVisualData == totalIndexVisualData
 
   const visualDataLength = allArrayVisualData.length
-  //   useEffect(() => {
-  //     console.log(
-  //       'selectedVisualData',
-  //       selectedVisualData,
-  //       currentIndexVisualData,
-  //       selectedVisualData[selectedVisualData.length - 1]?.Task.action_labels,
-  //     )
 
-  //     task = selectedVisualData[visualDataLength - 1]?.Task
-  //     feedback = selectedVisualData[visualDataLength - 1]?.['Auto-feedback']
-  //     som_data = selectedVisualData[visualDataLength - 1]?.['SOM']
-  //     evaluation_data = selectedVisualData[visualDataLength - 1]?.['Evaluation']
-  //   }, [selectedVisualData])
   console.log(
     'selectedVisualData',
     allArrayVisualData,
     currentIndexVisualData,
     allArrayVisualData[allArrayVisualData.length - 1]?.Task.action_labels,
+    filterVisualData,
   )
-  //   useEffect(() => {
-  //     console.log(
-  //       'selectedVisualData',
-  //       allArrayVisualData,
-  //       currentIndexVisualData,
-  //       allArrayVisualData[allArrayVisualData.length - 1]?.Task.action_labels,
-  //     )
-
-  //     task = allArrayVisualData[currentIndexVisualData]?.Task
-  //     feedback = allArrayVisualData[currentIndexVisualData]?.['Auto-feedback']
-  //     som_data = allArrayVisualData[currentIndexVisualData]?.['SOM']
-  //     evaluation_data = allArrayVisualData[currentIndexVisualData]?.['Evaluation']
-  //   }, [allArrayVisualData])
 
   const task = filterVisualData?.Task
   const feedback = filterVisualData?.['Auto-feedback']
@@ -103,14 +79,6 @@ function DemoContainer() {
 
   //   const labelTasks = ['None', 'Offer', 'Answer', 'Request']
   const labelTasks = task?.action_labels
-  console.log(
-    'selectedVisualData',
-    allArrayVisualData,
-    currentIndexVisualData,
-    allArrayVisualData[currentIndexVisualData]?.Task.action_labels,
-    task,
-    labelTasks,
-  )
   const tasks = {
     action_probs: task?.action_probs,
     agent_select: task?.aagent_select,
@@ -139,16 +107,7 @@ function DemoContainer() {
   const lightBarColorSOM = '#bbffb9'
   const darkBarColorSOM = '#65c368'
 
-  const labelEvaluation = [
-    ['', ''],
-    ['    SOM'],
-    ['   Auto-feedback'],
-    ['    Auto-feedback + SOM'],
-    ['   Task'],
-    ['   Task + SOM'],
-    ['    Task + Auto-feedback'],
-    ['Task + Auto-feedback + SOM'],
-  ]
+  const labelEvaluation = evaluation_data?.action_labels
 
   const evaluationValues = {
     action_probs: evaluation_data?.action_probs,
@@ -202,28 +161,24 @@ function DemoContainer() {
           </AppBar>
 
           <TabPanel value={value} index={0} dir={theme.direction}>
-            {visualDataLength == 0 ? (
-              <div>waiting for your visual data</div>
-            ) : (
-              <SystemActsBarCharts
-                labelTasks={labelTasks}
-                tasks={tasks}
-                lightBarColorTask={lightBarColorTask}
-                darkBarColorTask={darkBarColorTask}
-                labelFeedback={labelFeedback}
-                autoFeedbach={autoFeedbach}
-                lightBarColorAutoFeedback={lightBarColorAutoFeedback}
-                darkBarColorAutoFeedback={darkBarColorAutoFeedback}
-                labelSOM={labelSOM}
-                som={som}
-                lightBarColorSOM={lightBarColorSOM}
-                darkBarColorSOM={darkBarColorSOM}
-                labelEvaluation={labelEvaluation}
-                evaluationValues={evaluationValues}
-                lightBarColorEvaluation={lightBarColorEvaluation}
-                darkBarColorEvaluation={darkBarColorEvaluation}
-              />
-            )}
+            <SystemActsBarCharts
+              labelTasks={labelTasks}
+              tasks={tasks}
+              lightBarColorTask={lightBarColorTask}
+              darkBarColorTask={darkBarColorTask}
+              labelFeedback={labelFeedback}
+              autoFeedbach={autoFeedbach}
+              lightBarColorAutoFeedback={lightBarColorAutoFeedback}
+              darkBarColorAutoFeedback={darkBarColorAutoFeedback}
+              labelSOM={labelSOM}
+              som={som}
+              lightBarColorSOM={lightBarColorSOM}
+              darkBarColorSOM={darkBarColorSOM}
+              labelEvaluation={labelEvaluation}
+              evaluationValues={evaluationValues}
+              lightBarColorEvaluation={lightBarColorEvaluation}
+              darkBarColorEvaluation={darkBarColorEvaluation}
+            />
           </TabPanel>
           <TabPanel value={value} index={1} dir={theme.direction}>
             Item Two
