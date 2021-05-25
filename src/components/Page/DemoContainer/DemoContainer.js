@@ -1,16 +1,19 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './DemoContainer.css'
 import ActionBarChart from './ResponseAction/ActionBarChart'
 import EvaluationBarChart from './ResponseAction/EvaluationBarChart'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import AppBar from '@material-ui/core/AppBar'
+import Button from '@material-ui/core/Button'
+
 import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
 import { useTheme } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import SpeechInput from '../PageSpeechContainer/SpeechInput/SpeechInput'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import SystemActsBarCharts from './SystemActsBarCharts'
 function a11yProps(index) {
   return {
     id: `full-width-tab-${index}`,
@@ -44,24 +47,70 @@ function DemoContainer() {
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
+  const dispatch = useDispatch()
 
-  const selectedVisualData = useSelector((state) => state.visualdata.visualData)
+  const allArrayVisualData = useSelector((state) => state.visualdata.visualData)
+  const filterVisualData = useSelector(
+    (state) => state.visualdata.filterVisualData,
+  )
+
+  const currentIndexVisualData = useSelector((state) => state.visualdata.index)
+  const totalIndexVisualData = useSelector(
+    (state) => state.visualdata.total_index,
+  )
+  const forwardBtndisabled = currentIndexVisualData <= 0
+  const backwardBtndisabled =
+    totalIndexVisualData <= 0 || currentIndexVisualData == totalIndexVisualData
+
+  const visualDataLength = allArrayVisualData.length
+  //   useEffect(() => {
+  //     console.log(
+  //       'selectedVisualData',
+  //       selectedVisualData,
+  //       currentIndexVisualData,
+  //       selectedVisualData[selectedVisualData.length - 1]?.Task.action_labels,
+  //     )
+
+  //     task = selectedVisualData[visualDataLength - 1]?.Task
+  //     feedback = selectedVisualData[visualDataLength - 1]?.['Auto-feedback']
+  //     som_data = selectedVisualData[visualDataLength - 1]?.['SOM']
+  //     evaluation_data = selectedVisualData[visualDataLength - 1]?.['Evaluation']
+  //   }, [selectedVisualData])
   console.log(
     'selectedVisualData',
-    selectedVisualData,
-    selectedVisualData[selectedVisualData.length - 1]?.Task.action_labels,
+    allArrayVisualData,
+    currentIndexVisualData,
+    allArrayVisualData[allArrayVisualData.length - 1]?.Task.action_labels,
   )
-  const visualDataLength = selectedVisualData.length
+  //   useEffect(() => {
+  //     console.log(
+  //       'selectedVisualData',
+  //       allArrayVisualData,
+  //       currentIndexVisualData,
+  //       allArrayVisualData[allArrayVisualData.length - 1]?.Task.action_labels,
+  //     )
 
-  const task = selectedVisualData[visualDataLength - 1]?.Task
-  const feedback = selectedVisualData[visualDataLength - 1]?.['Auto-feedback']
-  const som_data = selectedVisualData[visualDataLength - 1]?.['SOM']
-  const evaluation_data =
-    selectedVisualData[visualDataLength - 1]?.['Evaluation']
+  //     task = allArrayVisualData[currentIndexVisualData]?.Task
+  //     feedback = allArrayVisualData[currentIndexVisualData]?.['Auto-feedback']
+  //     som_data = allArrayVisualData[currentIndexVisualData]?.['SOM']
+  //     evaluation_data = allArrayVisualData[currentIndexVisualData]?.['Evaluation']
+  //   }, [allArrayVisualData])
+
+  const task = filterVisualData?.Task
+  const feedback = filterVisualData?.['Auto-feedback']
+  const som_data = filterVisualData?.['SOM']
+  const evaluation_data = filterVisualData?.['Evaluation']
 
   //   const labelTasks = ['None', 'Offer', 'Answer', 'Request']
   const labelTasks = task?.action_labels
-
+  console.log(
+    'selectedVisualData',
+    allArrayVisualData,
+    currentIndexVisualData,
+    allArrayVisualData[currentIndexVisualData]?.Task.action_labels,
+    task,
+    labelTasks,
+  )
   const tasks = {
     action_probs: task?.action_probs,
     agent_select: task?.aagent_select,
@@ -108,6 +157,16 @@ function DemoContainer() {
   const lightBarColorEvaluation = '#ddc8ec'
   const darkBarColorEvaluation = '#594866'
 
+  const incrementIndex = () => {
+    dispatch({
+      type: 'INCREMENT_INDEX',
+    }) //to redux
+  }
+  const decrementIndex = () => {
+    dispatch({
+      type: 'DECREMENT_INDEX',
+    }) //to redux
+  }
   return (
     <div className="App2">
       <Grid
@@ -118,6 +177,12 @@ function DemoContainer() {
       >
         <Grid item style={{ width: 400 }}>
           <SpeechInput />
+          <Button onClick={decrementIndex} disabled={forwardBtndisabled}>
+            Forward
+          </Button>
+          <Button onClick={incrementIndex} disabled={backwardBtndisabled}>
+            Backward
+          </Button>
         </Grid>
 
         <Grid item>
@@ -137,98 +202,27 @@ function DemoContainer() {
           </AppBar>
 
           <TabPanel value={value} index={0} dir={theme.direction}>
-            {!visualDataLength ? (
+            {visualDataLength == 0 ? (
               <div>waiting for your visual data</div>
             ) : (
-              <Grid container spacing={3}>
-                <Grid item>
-                  <Grid
-                    container
-                    direction="column"
-                    justify="center"
-                    alignItems="center"
-                  >
-                    <div
-                      class="wrapper"
-                      style={{
-                        borderLeftColor: lightBarColorTask,
-                        color: darkBarColorTask,
-                      }}
-                    >
-                      <strong className="header-text_1">Task</strong>
-                      <div class="content">
-                        <ActionBarChart
-                          labels={labelTasks}
-                          dataset={tasks}
-                          lightBarColor={lightBarColorTask}
-                          darkBarColor={darkBarColorTask}
-                        />
-                      </div>
-                    </div>
-
-                    <div
-                      class="wrapper"
-                      style={{
-                        borderLeftColor: lightBarColorAutoFeedback,
-                        color: darkBarColorAutoFeedback,
-                      }}
-                    >
-                      <div className="header-sidebar">
-                        <strong className="header-text center-text-l">
-                          Auto-
-                        </strong>
-                        <strong className="header-text center-text-r">
-                          Feedback
-                        </strong>
-                      </div>
-                      <div class="content">
-                        <ActionBarChart
-                          labels={labelFeedback}
-                          dataset={autoFeedbach}
-                          lightBarColor={lightBarColorAutoFeedback}
-                          darkBarColor={darkBarColorAutoFeedback}
-                        />
-                      </div>
-                    </div>
-                    <div
-                      class="wrapper"
-                      style={{
-                        borderLeftColor: lightBarColorSOM,
-                        color: darkBarColorSOM,
-                      }}
-                    >
-                      <strong className="header-text_1">SOM</strong>
-                      <div class="content">
-                        <ActionBarChart
-                          labels={labelSOM}
-                          dataset={som}
-                          lightBarColor={lightBarColorSOM}
-                          darkBarColor={darkBarColorSOM}
-                        />
-                      </div>
-                    </div>
-                  </Grid>
-                </Grid>
-                <Grid item>
-                  <div
-                    class="wrapper_r"
-                    style={{
-                      borderLeftColor: lightBarColorEvaluation,
-                      color: darkBarColorEvaluation,
-                    }}
-                  >
-                    <strong className="header-text_1">Evaluation</strong>
-                    <div class="content">
-                      <EvaluationBarChart
-                        labels={labelEvaluation}
-                        dataset={evaluationValues}
-                        lightBarColor={lightBarColorEvaluation}
-                        darkBarColor={darkBarColorEvaluation}
-                      />
-                    </div>
-                  </div>
-                </Grid>
-              </Grid>
+              <SystemActsBarCharts
+                labelTasks={labelTasks}
+                tasks={tasks}
+                lightBarColorTask={lightBarColorTask}
+                darkBarColorTask={darkBarColorTask}
+                labelFeedback={labelFeedback}
+                autoFeedbach={autoFeedbach}
+                lightBarColorAutoFeedback={lightBarColorAutoFeedback}
+                darkBarColorAutoFeedback={darkBarColorAutoFeedback}
+                labelSOM={labelSOM}
+                som={som}
+                lightBarColorSOM={lightBarColorSOM}
+                darkBarColorSOM={darkBarColorSOM}
+                labelEvaluation={labelEvaluation}
+                evaluationValues={evaluationValues}
+                lightBarColorEvaluation={lightBarColorEvaluation}
+                darkBarColorEvaluation={darkBarColorEvaluation}
+              />
             )}
           </TabPanel>
           <TabPanel value={value} index={1} dir={theme.direction}>

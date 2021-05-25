@@ -11,32 +11,6 @@ import TaskDescritionAndBriefing from '../../../Page/PageTaskDescriptionAndBrief
 import PageDisplayCard from '../../PageDisplayCard/PageDisplayCard'
 import ErrorDescription from '../../ErrorDescription/ErrorDescription'
 
-// The speech recognition interface lives on the browser’s window object
-const SpeechRecognition =
-  window.SpeechRecognition || window.webkitSpeechRecognition // if none exists -> undefined
-const recognition = new SpeechRecognition() //new webkitSpeechRecognition();
-const synth = window.speechSynthesis //speech speak
-
-function speak(text) {
-  // Create a new instance of SpeechSynthesisUtterance.
-  var msg = new SpeechSynthesisUtterance()
-  // Set the text.
-  msg.text = text
-  msg.volume = 1
-  msg.rate = 1
-  msg.pitch = 1
-
-  // If a voice has been selected, find the voice and set the
-  // utterance instance's voice attribute.
-  // if (voiceSelect.value) {
-  msg.voice = speechSynthesis.getVoices().filter(function (voice) {
-    return voice.name == 'Google UK English Male'
-  })[0]
-  // }
-  // Queue this utterance.
-  window.speechSynthesis.speak(msg)
-}
-
 const SpeechInput = () => {
   const [inputText, setInputText] = useState('') //input text state control
   const [responseStorage, setResponseStorage] = useState() //response data control
@@ -69,6 +43,32 @@ const SpeechInput = () => {
   const { _endpointHubPHP } = useContext(SettingContext) //passing globle configure viable to child components
   const dispatch = useDispatch()
 
+  // The speech recognition interface lives on the browser’s window object
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition // if none exists -> undefined
+  const recognition = new SpeechRecognition() //new webkitSpeechRecognition();
+  const synth = window.speechSynthesis //speech speak
+
+  function speak(text) {
+    // Create a new instance of SpeechSynthesisUtterance.
+    var msg = new SpeechSynthesisUtterance()
+    // Set the text.
+    msg.text = text
+    msg.volume = 1
+    msg.rate = 1
+    msg.pitch = 1
+
+    // If a voice has been selected, find the voice and set the
+    // utterance instance's voice attribute.
+    // if (voiceSelect.value) {
+    msg.voice = speechSynthesis.getVoices().filter(function (voice) {
+      return voice.name == 'Google UK English Male'
+    })[0]
+    // }
+    // Queue this utterance.
+    window.speechSynthesis.speak(msg)
+  }
+
   function micBtnClick() {
     if (!isRecording) {
       // Start Voice Recognition
@@ -86,7 +86,7 @@ const SpeechInput = () => {
     recognition.onresult = (event) => {
       const current = event.resultIndex
       const transcript = event.results[current][0].transcript
-      console.log('transcript', event.results[0])
+      console.log('transcript', event)
 
       setInputText(transcript)
       const hypothesis_array = []
@@ -146,11 +146,11 @@ const SpeechInput = () => {
             console.log('returnGoodbye', res.data.utt_number)
             setDisabledSubmitBtn(false)
           }
-          //dispatch to redux
           dispatch({
-            type: 'ADD_vISUALDATA',
+            type: 'ADD_VISUALDATA',
             payload: res.data?.system_acts,
           }) //to redux
+
           console.log('selectedVisualData', res.data?.system_acts)
 
           res['input'] = transcript
