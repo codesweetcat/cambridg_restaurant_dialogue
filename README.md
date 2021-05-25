@@ -49,3 +49,11 @@ Level up premisson : chmod -R 755 ./dialogue/
 ## What are the steps to create a new tab for visualizing in DemoContainer?
 
 ## Where is (will be) the code for uploading audio data?
+
+## Where are the configuration files and what are the useful configuration options?
+
+## What if I see a blue line instead of the page? 
+ https://stg-woc7/hubproduction_new/hub.php
+ click advanced button, click still access unsafe 
+
+
