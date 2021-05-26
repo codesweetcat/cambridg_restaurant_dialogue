@@ -46,11 +46,10 @@ const visualDataReducer = (state = initState, action) => {
       return {
         ...state,
         visualData: [...state.visualData, action.payload],
-        index: state.index + 1,
+        index: state.total_index + 1,
         total_index: state.total_index + 1,
         filterVisualData: action.payload,
       }
-
     case 'INCREMENT_INDEX':
       return {
         ...state,
@@ -62,6 +61,18 @@ const visualDataReducer = (state = initState, action) => {
         ...state,
         filterVisualData: state.visualData[state.index - 1],
         index: state.index - 1,
+      }
+    case 'JUMP_FIRSTINDEX':
+      return {
+        ...state,
+        filterVisualData: state.visualData[0],
+        index: 0,
+      }
+    case 'JUMP_LASTINDEX':
+      return {
+        ...state,
+        filterVisualData: state.visualData[state.total_index],
+        index: state.total_index,
       }
     default:
       return state

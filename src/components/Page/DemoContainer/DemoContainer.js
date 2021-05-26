@@ -14,6 +14,14 @@ import Grid from '@material-ui/core/Grid'
 import SpeechInput from '../PageSpeechContainer/SpeechInput/SpeechInput'
 import { useSelector, useDispatch } from 'react-redux'
 import SystemActsBarCharts from './SystemActsBarCharts'
+
+import SkipNextSharpIcon from '@material-ui/icons/SkipNextSharp'
+import IconButton from '@material-ui/core/IconButton'
+
+import ArrowDropUpSharpIcon from '@material-ui/icons/ArrowDropUpSharp'
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
+import ArrowDropDownSharpIcon from '@material-ui/icons/ArrowDropDownSharp'
+import VerticalAlignTopOutlinedIcon from '@material-ui/icons/VerticalAlignTopOutlined'
 function a11yProps(index) {
   return {
     id: `full-width-tab-${index}`,
@@ -51,6 +59,7 @@ function DemoContainer() {
 
   const allArrayVisualData = useSelector((state) => state.visualdata.visualData)
   const filterVisualData = useSelector(
+    //Selected visual data
     (state) => state.visualdata.filterVisualData,
   )
 
@@ -58,11 +67,9 @@ function DemoContainer() {
   const totalIndexVisualData = useSelector(
     (state) => state.visualdata.total_index,
   )
-  const forwardBtndisabled = currentIndexVisualData <= 0
-  const backwardBtndisabled =
+  const forwardSingleStepDisabled = currentIndexVisualData <= 0
+  const backwardSingleSteptDisabled =
     totalIndexVisualData <= 0 || currentIndexVisualData == totalIndexVisualData
-
-  const visualDataLength = allArrayVisualData.length
 
   console.log(
     'selectedVisualData',
@@ -116,14 +123,9 @@ function DemoContainer() {
   const lightBarColorEvaluation = '#ddc8ec'
   const darkBarColorEvaluation = '#594866'
 
-  const incrementIndex = () => {
+  const jumpIndex = (actionType) => {
     dispatch({
-      type: 'INCREMENT_INDEX',
-    }) //to redux
-  }
-  const decrementIndex = () => {
-    dispatch({
-      type: 'DECREMENT_INDEX',
+      type: actionType,
     }) //to redux
   }
   return (
@@ -136,16 +138,53 @@ function DemoContainer() {
       >
         <Grid item style={{ width: 400 }}>
           <SpeechInput />
-          <Button onClick={decrementIndex} disabled={forwardBtndisabled}>
-            Forward
-          </Button>
-          <Button onClick={incrementIndex} disabled={backwardBtndisabled}>
-            Backward
-          </Button>
         </Grid>
-
-        <Grid item>
-          <AppBar position="static" color="default" style={{ width: '942px' }}>
+        <Grid item style={{ width: 35, marginTop: '15%' }}>
+          <IconButton
+            disableRipple={true}
+            disableFocusRipple={true}
+            onClick={() => jumpIndex('JUMP_FIRSTINDEX')}
+            disabled={forwardSingleStepDisabled}
+            style={{ width: 35, height: 35 }}
+          >
+            <SkipNextSharpIcon
+              style={{ width: 35, transform: 'rotate(-90deg)' }}
+            />
+          </IconButton>
+          <IconButton
+            disableRipple={true}
+            disableFocusRipple={true}
+            disabled={forwardSingleStepDisabled}
+            style={{ width: 35, height: 35 }}
+          >
+            <ArrowDropUpSharpIcon
+              style={{ fontSize: 35 }}
+              onClick={() => jumpIndex('DECREMENT_INDEX')}
+            />
+          </IconButton>
+          <IconButton
+            disableRipple={true}
+            disableFocusRipple={true}
+            onClick={() => jumpIndex('INCREMENT_INDEX')}
+            disabled={backwardSingleSteptDisabled}
+            style={{ width: 35, height: 35 }}
+          >
+            <ArrowDropDownSharpIcon style={{ fontSize: 35 }} />
+          </IconButton>
+          <IconButton
+            disableRipple={true}
+            disableFocusRipple={true}
+            onClick={() => jumpIndex('JUMP_LASTINDEX')}
+            disabled={backwardSingleSteptDisabled}
+            style={{ width: 35, height: 35 }}
+          >
+            <SkipNextSharpIcon
+              style={{ width: 35, transform: 'rotate(90deg)' }}
+            />
+          </IconButton>
+        </Grid>
+        <Grid item style={{ width: 1000 }}>
+          <AppBar position="static" color="default">
             <Tabs
               value={value}
               onChange={handleChange}
@@ -154,7 +193,7 @@ function DemoContainer() {
               variant="fullWidth"
               aria-label="full width tabs example"
             >
-              <Tab label="Evaluation" {...a11yProps(0)} />
+              <Tab label="System Action Selection" {...a11yProps(0)} />
               <Tab label="Active" {...a11yProps(1)} />
               <Tab label="Active" {...a11yProps(2)} />
             </Tabs>
