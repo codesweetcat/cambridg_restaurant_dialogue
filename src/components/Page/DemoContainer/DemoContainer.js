@@ -88,11 +88,11 @@ function DemoContainer() {
   const labelTasks = task?.action_labels
   const tasks = {
     action_probs: task?.action_probs,
-    agent_select: task?.aagent_select,
+    agent_select: task?.agent_select,
     eval_select: task?.eval_select,
   }
   //pass by props
-  const lightBarColorTask = '#007BFF'
+  const lightBarColorTask = '#76b8ff'
   const darkBarColorTask = '#002E5F'
 
   const labelFeedback = feedback?.action_labels
@@ -128,6 +128,32 @@ function DemoContainer() {
       type: actionType,
     }) //to redux
   }
+  function speak(text) {
+    // Create a new instance of SpeechSynthesisUtterance.
+    var msg = new SpeechSynthesisUtterance()
+    // Set the text.
+    msg.text = text
+    msg.volume = 1
+    msg.rate = 1
+    msg.pitch = 1
+
+    // If a voice has been selected, find the voice and set the
+    // utterance instance's voice attribute.
+    // if (voiceSelect.value) {
+    msg.voice = speechSynthesis.getVoices().filter(function (voice) {
+      return voice.name == 'Google UK English Male'
+    })[0]
+    // }
+    // Queue this utterance.
+    console.log('fsfds')
+    window.speechSynthesis.speak(msg)
+  }
+
+  useEffect(() => {
+    speak(
+      'Welcome to the Cambridge restaurant information system.  How may I help you?',
+    )
+  }, [])
   return (
     <div className="App2">
       <Grid
